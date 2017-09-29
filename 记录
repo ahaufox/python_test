@@ -1,0 +1,27 @@
+http://miaobang.huinongtx.com/admin/gq_supply/audit?id=4867&product_name=%E7%B4%AB%E8%96%87&audit_type=1&one_id=1&two_id=384&three_id=0&four_id=0&product_id=500&class_level=2&pc_pid=384
+
+http://miaobang.huinongtx.com/admin/gq_new_product_class/getSelectTailClass?{"one_id":2093,"pc_name":""}
+http://miaobang.huinongtx.com/admin/gq_new_product_class/getAjaxClassList?id=1&type=2
+
+getAjaxClassList
+
+
+
+
+模拟请求
+1、需要参数
+#    id=259  供应id
+#    product_name=%E7%B4%AB%E8%96%87 供应产品名
+#    audit_type=1    固定
+    one_id=1    一级分类
+    two_id=384  二级分类
+    three_id=0  三级分类
+    four_id=0   五级分类
+    product_id=500
+    class_level=2   分类级别，0是一级
+    pc_pid=384  要放的分类
+
+2、参数获取
+    待审核表
+    post：/admin/gq_supply/index?is_sale=0&add_time=&member_name=&is_recommend=0&product_name=&pro_id=&city_id=&country_id=&is_self_define=1&is_audit=2
+    value：is_sale=0&add_time=&member_name=&is_recommend=0&product_name=&pro_id=&city_id=&country_id=&is_self_define=1&is_audit=2
