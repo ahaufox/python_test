@@ -3,10 +3,7 @@ import requests
 import urllib2
 import cookielib
 import urllib
-import sys
-reload(sys)
-sys.setdefaultencoding("utf-8")
-# 防止中文报错
+
 
 CaptchaUrl = "http://miaobang.huinongtx.com/captcha.html"
 
@@ -17,7 +14,7 @@ opener = urllib2.build_opener(handler)
 # 将cookies绑定到一个opener cookie由cookielib自动管理
 
 username='admin'
-password='mbb%402017%25TGBnhy6'
+password='mbb@2017%TGBnhy6'
 # 用户名和密码
 
 picture = opener.open(CaptchaUrl).read()
