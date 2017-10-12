@@ -5,7 +5,7 @@ import urllib2
 reload(sys)
 sys.setdefaultencoding('UTF-8')
 for x in range(0,20):
-    url='http://www.baidu.com/s?wd={}&pn={}'.format("苗木",x*10)
+    url='http://www.baidu.com/s?wd={}&pn={}'.format("苗木平台",x*10)
     date=urllib2.urlopen(url)
     soup=BeautifulSoup(date, "html.parser")
     num=len(soup.select('a.c-showurl'))
