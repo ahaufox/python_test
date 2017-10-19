@@ -35,4 +35,4 @@ loop.run_until_complete(asyncio.gather(*tasks))
 
 loop.close()
 session.close()
-print getPage(session, word)
+print (getPage(session, word))

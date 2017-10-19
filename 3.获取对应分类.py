@@ -15,4 +15,4 @@ soup = BeautifulSoup(date,"html.parser")
 cat=soup.div.p.text
 #cat里面是json数据
 #cat=demjson.decode(cat)
-print cat
+print (cat)
