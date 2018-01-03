@@ -29,22 +29,20 @@ def get_info(postData):
     return dict
 
 # 连接数据库
+
 conn = pymysql.connect(host='127.0.0.1',
-                           port=3306,
-                           user='root',
-                           password='root',
-                           db='tel',
-                           charset='utf8',
-                           cursorclass=pymysql.cursors.DictCursor)
-
+                       port=3306,
+                        user='root',
+                        password='root',
+                        db='tel',
+                        charset='utf8',
+                        cursorclass=pymysql.cursors.DictCursor)
 cur = conn.cursor()
-
 # 获取用户id
 # 设定一次写入条数
 for n in range(500,1000):
     wr = 5 * n
     sql_user_id = 'select id from mmt_list where gold_vip IS NULL limit 0,{}'.format(wr)
-
     cur.execute(sql_user_id)
     ret = cur.fetchall()
     conn.commit()
@@ -52,13 +50,15 @@ for n in range(500,1000):
     for i in range(0, wr - 1):
         list.append(ret[i]['id'])
     # id组装
+    xxx=0
     for ss in list:
         postData = {
             'action': 'storegetinfo',
             'content[0][id]': '{}'.format(ss)
         };
         #  获取tel
-        print ss
+        xxx=xxx+1
+        print '共{}条，第{}条。'.format(wr,xxx)
         info = get_info(postData)
         # tel写入数据库
         sql_user_info = """update mmt_list set area=\"{}\", company_name=\"{}\", address=\"{}\", user_name=\"{}\", job_postion=\"{}\", introduction=\"{}\",wechat=\"{}\",gold_vip=\"{}\",jewel_vip={} WHERE id={}""".format(
@@ -69,6 +69,7 @@ for n in range(500,1000):
         except:
             continue
         conn.commit()
-
 cur.close()
 # 获取数据
+
+

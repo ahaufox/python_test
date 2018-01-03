@@ -4,6 +4,7 @@ import urllib
 import urllib2
 import json
 import pymysql.cursors
+import threading
 # 获取tel的函数
 def get_tel(postData):
     url = 'http://51mmt.com/mob/Member/RPC'
@@ -30,35 +31,39 @@ conn = pymysql.connect(host='127.0.0.1',
                        cursorclass=pymysql.cursors.DictCursor)
 cur = conn.cursor()
 
-# 获取用户id
-# 设定一次写入条数
-for n in range(500,600):
-    wr = 5*n
-    sql_userid = 'select id from mmt_list WHERE tel IS NULL limit 0,{}'.format(wr)
-    cur.execute(sql_userid)
-    ret = cur.fetchall()
-    conn.commit()
-    list = []
-    for i in range(0, wr - 1):
-        list.append(ret[i]['id'])
-    # id组装
-    for ss in list:
-        postData = {
-            'action': 'callCredits',
-            'content[0][type]': '苗店',
-            'content[0][userID]': '{}'.format(ss),
-            'content[0][callCount]': '2'
-        };
-        #  获取tel
-        print ss
-        tel = get_tel(postData)
-        # tel写入数据库
-        if tel == '':
-            sql_user_tel = 'update mmt_list set tel={} WHERE id={}'.format(0, ss)
-            cur.execute(sql_user_tel)
-            conn.commit()
-        else:
-            sql_user_tel = 'update mmt_list set tel={} WHERE id={}'.format(tel, ss)
-            cur.execute(sql_user_tel)
-            conn.commit()
+def insert_tel():
+    for n in range(500, 600):
+        wr = 5 * n
+        sql_userid = 'select id from mmt_list WHERE tel IS NULL limit 0,{}'.format(wr)
+        cur.execute(sql_userid)
+        ret = cur.fetchall()
+        conn.commit()
+        list = []
+        for i in range(0, wr - 1):
+            list.append(ret[i]['id'])
+        # id组装
+        for ss in list:
+            postData = {
+                'action': 'callCredits',
+                'content[0][type]': '苗店',
+                'content[0][userID]': '{}'.format(ss),
+                'content[0][callCount]': '2'
+            };
+            #  获取tel
+            print ss
+            tel = get_tel(postData)
+            # tel写入数据库
+            if tel == '':
+                sql_user_tel = 'update mmt_list set tel={} WHERE id={}'.format(0, ss)
+                cur.execute(sql_user_tel)
+                conn.commit()
+            else:
+                sql_user_tel = 'update mmt_list set tel={} WHERE id={}'.format(tel, ss)
+                cur.execute(sql_user_tel)
+                conn.commit()
+
+
+for i in xrange(1000):
+    t=threading.Thread(target=insert_tel())
+    t.start()
 cur.close()
