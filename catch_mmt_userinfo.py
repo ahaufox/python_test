@@ -31,10 +31,9 @@ def get_info(postData):
     return dict
 
 def insert_info():
-    for n in range(500, 1000):
-        cur = conn.cursor()
+    for n in range(10, 100):
         wr = 5 * n
-        sql_user_id = 'select id from mmt_list where gold_vip IS NULL and tel is NULL limit 0,{}'.format(wr)
+        sql_user_id = 'select id from mmt_list where gold_vip IS NULL  limit 0,{}'.format(wr)
         cur.execute(sql_user_id)
         ret = cur.fetchall()
         conn.commit()
@@ -63,7 +62,6 @@ def insert_info():
             conn.commit()
 
             # 连接数据库
-        cur.close()
 
 conn = pymysql.connect(host='127.0.0.1',
                        port=3306,
@@ -72,6 +70,7 @@ conn = pymysql.connect(host='127.0.0.1',
                        db='tel',
                        charset='utf8',
                        cursorclass=pymysql.cursors.DictCursor)
+cur = conn.cursor()
 
 for i in xrange(1000):
     t=threading.Thread(target=insert_info())

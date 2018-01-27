@@ -1,0 +1,16 @@
+http://huinongtx.udesk.cn/open_api_v1/customers?email=admin@udesk.cn&timestamp=1494474404&sign=2f4c2c3d0b4c24cfa4feca76e237da0c368a00d8
+
+{
+    "customer": {
+        "nick_name": "测试客户2",
+        "cellphones": [
+            [null, "13100000002"]
+        ],
+        "custom_fields": {
+            "TextField_1": "普通文本内容",
+            "SelectField_1": ["0"],
+            "SelectField_2": ["0"],
+            "SelectField_3": ["0","3"]
+        },
+    },
+}

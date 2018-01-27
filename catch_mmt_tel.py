@@ -1,27 +1,13 @@
-# -*- coding: GBK -*-
+# -*- coding: utf-8 -*-
 from bs4 import BeautifulSoup
 import urllib
 import urllib2
 import json
 import pymysql.cursors
 import threading
-# »ñÈ¡telµÄº¯Êı
-def get_tel(postData):
-    url = 'http://51mmt.com/mob/Member/RPC'
-    data = urllib.urlencode(postData)
-    headers = {
-        'User-Agent': 'Mozilla/5.0 (Linux; U; Android 2.3.6; zh-cn; GT-S5660 Build/GINGERBREAD) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1 MicroMessenger/4.5.255',
-        'Cookie': 'ASP.NET_SessionId=cchnw3ke0k3ktbqzhrzfu2g4'}
 
-    request = urllib2.Request(url, data, headers=headers)
-    response = urllib2.urlopen(request)
-    # »ñÈ¡Ö¸¶¨Êı¾İ
-    soup = BeautifulSoup(response, "html.parser")
-    res = soup.text
-    res_json = json.loads(res)
-    s = res_json['content'][0]['key']
-    return s
-# Á¬½ÓÊı¾İ¿â
+
+# è¿æ¥æ•°æ®åº“
 conn = pymysql.connect(host='127.0.0.1',
                        port=3306,
                        user='root',
@@ -32,38 +18,54 @@ conn = pymysql.connect(host='127.0.0.1',
 cur = conn.cursor()
 
 def insert_tel():
-    for n in range(500, 600):
-        wr = 5 * n
-        sql_userid = 'select id from mmt_list WHERE tel IS NULL limit 0,{}'.format(wr)
+    for n in range(0, 10):
+        wr = 5
+        sql_userid = 'select id from mmt_list WHERE tel=0 AND gold_vip=1 limit 0,{}'.format(wr)
         cur.execute(sql_userid)
         ret = cur.fetchall()
         conn.commit()
         list = []
         for i in range(0, wr - 1):
             list.append(ret[i]['id'])
-        # id×é×°
+        # idç»„è£…
         for ss in list:
             postData = {
                 'action': 'callCredits',
-                'content[0][type]': 'Ãçµê',
+                'content[0][type]': 'è‹—åº—',
                 'content[0][userID]': '{}'.format(ss),
                 'content[0][callCount]': '2'
             };
-            #  »ñÈ¡tel
+            #  è·å–tel
             print ss
             tel = get_tel(postData)
-            # telĞ´ÈëÊı¾İ¿â
+            # telå†™å…¥æ•°æ®åº“
             if tel == '':
-                sql_user_tel = 'update mmt_list set tel={} WHERE id={}'.format(0, ss)
-                cur.execute(sql_user_tel)
-                conn.commit()
+                sql_user_tel = 'update mmt_list set tel={} WHERE id={}'.format(00, ss)
             else:
                 sql_user_tel = 'update mmt_list set tel={} WHERE id={}'.format(tel, ss)
-                cur.execute(sql_user_tel)
-                conn.commit()
+            cur.execute(sql_user_tel)
+    conn.commit()
 
+# è·å–telçš„å‡½æ•°
+def get_tel(postData):
+    url = 'http://51mmt.com/mob/Member/RPC'
+    data = urllib.urlencode(postData)
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Linux; U; Android 2.3.6; zh-cn; GT-S5660 Build/GINGERBREAD) AppleWebKit/533.1 (KHTML, like Gecko) Version/4.0 Mobile Safari/533.1 MicroMessenger/4.5.255',
+        'Cookie': 'ASP.NET_SessionId=cchnw3ke0k3ktbqzhrzfu2g4'}
 
-for i in xrange(1000):
+    request = urllib2.Request(url, data, headers=headers)
+    response = urllib2.urlopen(request)
+    # è·å–æŒ‡å®šæ•°æ®
+    soup = BeautifulSoup(response, "html.parser")
+    res = soup.text
+    res_json = json.loads(res)
+    s = res_json['content'][0]['key']
+    return s
+
+for i in xrange(200):
     t=threading.Thread(target=insert_tel())
     t.start()
 cur.close()
+
+
